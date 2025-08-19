@@ -1,7 +1,9 @@
+
 "use client"
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import useLocalStorage from '@/hooks/use-local-storage';
+import { useToast } from '@/hooks/use-toast';
 
 type UserMode = 'student' | 'agent';
 
@@ -24,6 +26,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [userMode, setUserMode] = useLocalStorage<UserMode>('userMode', 'student');
   const [savedProperties, setSavedProperties] = useLocalStorage<number[]>('savedProperties', []);
   const [compareProperties, setCompareProperties] = useLocalStorage<number[]>('compareProperties', []);
+  const { toast } = useToast();
 
   const toggleSavedProperty = (id: number) => {
     setSavedProperties(prev => 
@@ -42,9 +45,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
         if(prev.length < 3) {
             return [...prev, id];
+        } else {
+            toast({
+              variant: "destructive",
+              title: "Comparison Limit Reached",
+              description: "You can only compare up to 3 properties at a time.",
+            });
+            return prev;
         }
-        // Optionally, show a toast notification here that limit is 3
-        return prev;
     });
   };
 

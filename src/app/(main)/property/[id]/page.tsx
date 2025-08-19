@@ -1,3 +1,4 @@
+
 import { getPropertyById, getAgentById, properties as allProperties } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -17,6 +18,7 @@ import {
 import { SaveButton } from '@/components/SaveButton';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { PropertyCard } from '@/components/PropertyCard';
+import { CompareButton } from '@/components/CompareButton';
 
 const amenityIcons: { [key: string]: React.ElementType } = {
   Water: Bath,
@@ -127,7 +129,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 <span className="text-lg font-normal text-muted-foreground">/{property.priceType}</span>
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-2">
               {agent && (
                 <div className="flex items-center gap-4 mb-4">
                   <Avatar className="h-16 w-16">
@@ -141,7 +143,8 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                 </div>
               )}
                {agent && <WhatsAppButton agent={agent} property={property} />}
-              <Button variant="outline" className="w-full mt-2">Schedule a Tour</Button>
+              <Button variant="outline" className="w-full">Schedule a Tour</Button>
+              <CompareButton propertyId={property.id} />
             </CardContent>
           </Card>
           

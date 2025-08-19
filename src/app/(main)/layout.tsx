@@ -1,4 +1,6 @@
+
 import { Header } from "@/components/Header";
+import { CompareBar } from "@/components/CompareBar";
 
 export default function MainLayout({
   children,
@@ -9,6 +11,7 @@ export default function MainLayout({
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1">{children}</main>
+      <CompareBar />
     </div>
   )
 }
