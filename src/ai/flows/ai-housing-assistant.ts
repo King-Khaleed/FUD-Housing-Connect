@@ -29,9 +29,9 @@ const AiHousingAssistantOutputSchema = z.object({
   recommendations: z.array(
     z.object({
       propertyId: z.number().describe('The ID of the recommended property.'),
-      reason: z.string().describe('The reason why this property is recommended.'),
+      reason: z.string().describe('A detailed explanation of why this property is a good match based on the user\'s criteria (budget, location, amenities, etc.).'),
     })
-  ).describe('A list of property recommendations with reasons. Only recommend properties from the provided list.'),
+  ).describe('A list of up to 3 property recommendations with detailed reasons. Only recommend properties from the provided list.'),
 });
 
 export type AiHousingAssistantOutput = z.infer<typeof AiHousingAssistantOutputSchema>;
@@ -53,26 +53,26 @@ const prompt = ai.definePrompt({
   output: {schema: AiHousingAssistantOutputSchema},
   prompt: `You are a friendly and helpful AI Housing Assistant for students of Federal University Dutse (FUD). Your goal is to have a natural conversation and help them find the perfect off-campus housing.
 
-  - Start by greeting the user and asking what they are looking for.
-  - Ask clarifying questions one by one to understand their needs. Cover budget (in Naira), room type, distance from campus, preferred amenities, and move-in timeline.
-  - Be conversational. For example, instead of just asking "Budget?", say "Great! What's your budget like? Are we looking for something super affordable or more premium?"
-  - Once you have enough information, use the provided list of properties to find the best matches.
-  - Present your recommendations clearly. For each recommendation, provide the property ID and a short, compelling reason it fits their needs.
-  - If you provide recommendations, end your conversational response with a summary of what you've found for them.
-  - If no properties match, apologize and suggest they adjust their criteria.
-  - Only recommend properties from the JSON list provided below. Do not invent properties.
+  **Core Instructions:**
+  1.  **Be Conversational:** Greet the user warmly. Ask clarifying questions one-by-one to understand their needs. Cover budget (in Naira), room type, distance from campus (e.g., "walking distance"), and must-have amenities.
+  2.  **Analyze User Needs:** Carefully read the user's message and the conversation history to extract their preferences.
+  3.  **Analyze Property Data:** You have been provided a JSON list of available properties. You MUST use this list as your only source of information. Do not invent properties.
+  4.  **Score and Recommend:** Based on the user's preferences, find the best 1-3 matches from the list. Prioritize properties that are a close match for budget, room type, and location.
+  5.  **Provide Detailed Reasons:** For each recommendation, you MUST provide a detailed `reason` explaining *why* it's a good fit. For example: "This one is great because it's a Self-contain right in your budget at ₦80,000, and it's within walking distance of campus, which you mentioned was important."
+  6.  **Summarize and Conclude:** If you are providing recommendations, end your conversational `response` with a summary of what you've found. If no properties are a good match, apologize and suggest they adjust their criteria.
+  7.  **Do not ask for all criteria at once.** Engage in a back-and-forth conversation.
 
-  Here are the available properties:
+  **Available Properties:**
   {{{json properties}}}
 
-  Here is the conversation history:
+  **Conversation History:**
   {{#if conversationHistory}}
   {{#each conversationHistory}}
   {{this.role}}: {{this.content}}
   {{/each}}
   {{/if}}
 
-  Here is the user's latest message:
+  **User's Latest Message:**
   {{userMessage}}
   `,
 });
@@ -85,14 +85,17 @@ const aiHousingAssistantFlow = ai.defineFlow(
   },
   async (input) => {
     // Select relevant fields from properties to pass to the model
+    // This helps keep the prompt concise and focused.
     const propertiesForPrompt = allProperties.map(p => ({
         id: p.id,
         title: p.title,
         price: p.price,
+        priceType: p.priceType,
         roomType: p.roomType,
-        location: p.location,
+        location: p.location.area,
+        distanceFromCampus: p.location.distanceFromCampus,
         amenities: p.amenities,
-        description: p.description.substring(0, 100) + '...' // Keep it brief
+        verified: p.verified,
     }));
 
     const {output} = await prompt({ ...input, properties: propertiesForPrompt });
