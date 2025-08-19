@@ -8,7 +8,7 @@ import { Logo } from "@/components/Logo";
 import { UserModeToggle } from "@/components/UserModeToggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
@@ -54,10 +54,13 @@ export function Header() {
                       </Button>
                   </SheetTrigger>
                   <SheetContent side="right">
-                      <nav className="grid gap-2 text-lg font-medium">
-                          <SheetClose asChild>
+                      <SheetHeader>
+                        <SheetTitle className="sr-only">Main Menu</SheetTitle>
+                        <SheetClose asChild>
                             <Logo />
-                          </SheetClose>
+                        </SheetClose>
+                      </SheetHeader>
+                      <nav className="grid gap-2 text-lg font-medium mt-4">
                           {navLinks.map((link) => (
                             <SheetClose asChild key={link.href}>
                               <Link
