@@ -11,6 +11,7 @@ interface AppContextType {
   savedProperties: number[];
   toggleSavedProperty: (id: number) => void;
   isPropertySaved: (id: number) => boolean;
+  clearSavedProperties: () => void;
   compareProperties: number[];
   toggleCompareProperty: (id: number) => void;
   isPropertyForCompare: (id: number) => boolean;
@@ -31,6 +32,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const isPropertySaved = (id: number) => savedProperties.includes(id);
+  
+  const clearSavedProperties = () => setSavedProperties([]);
 
   const toggleCompareProperty = (id: number) => {
     setCompareProperties(prev => {
@@ -55,6 +58,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     savedProperties,
     toggleSavedProperty,
     isPropertySaved,
+    clearSavedProperties,
     compareProperties,
     toggleCompareProperty,
     isPropertyForCompare,
