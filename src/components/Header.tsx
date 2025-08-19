@@ -1,14 +1,16 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Bot, Info, HelpCircle } from "lucide-react";
+import { Heart, Bot, Info, HelpCircle, Home } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { UserModeToggle } from "@/components/UserModeToggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
+  { href: "/", label: "Home", icon: Home },
   { href: "/saved", label: "Saved", icon: Heart },
   { href: "/ai-assistant", label: "AI Assistant", icon: Bot },
   { href: "/about", label: "About", icon: Info },
