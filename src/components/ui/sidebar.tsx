@@ -562,6 +562,8 @@ const SidebarMenuButton = React.forwardRef<
   ) => {
     const { isMobile, state } = useSidebar()
     
+    const Comp = asChild ? Slot : (href ? 'a' : 'button');
+
     const content = (
         <Comp
             ref={ref}
@@ -574,8 +576,6 @@ const SidebarMenuButton = React.forwardRef<
             {children}
         </Comp>
     );
-
-    const Comp = asChild ? Slot : (href ? 'a' : 'button');
 
     const button = href ? <Link href={href} passHref legacyBehavior>{content}</Link> : content;
     
