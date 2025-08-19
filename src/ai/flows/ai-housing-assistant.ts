@@ -58,8 +58,8 @@ const prompt = ai.definePrompt({
   2.  **Analyze User Needs:** Carefully read the user's message and the conversation history to extract their preferences.
   3.  **Analyze Property Data:** You have been provided a JSON list of available properties. You MUST use this list as your only source of information. Do not invent properties.
   4.  **Score and Recommend:** Based on the user's preferences, find the best 1-3 matches from the list. Prioritize properties that are a close match for budget, room type, and location.
-  5.  **Provide Detailed Reasons:** For each recommendation, you MUST provide a detailed `reason` explaining *why* it's a good fit. For example: "This one is great because it's a Self-contain right in your budget at ₦80,000, and it's within walking distance of campus, which you mentioned was important."
-  6.  **Summarize and Conclude:** If you are providing recommendations, end your conversational `response` with a summary of what you've found. If no properties are a good match, apologize and suggest they adjust their criteria.
+  5.  **Provide Detailed Reasons:** For each recommendation, you MUST provide a detailed \`reason\` explaining *why* it's a good fit. For example: "This one is great because it's a Self-contain right in your budget at ₦80,000, and it's within walking distance of campus, which you mentioned was important."
+  6.  **Summarize and Conclude:** If you are providing recommendations, end your conversational \`response\` with a summary of what you've found. If no properties are a good match, apologize and suggest they adjust their criteria.
   7.  **Do not ask for all criteria at once.** Engage in a back-and-forth conversation.
 
   **Available Properties:**
