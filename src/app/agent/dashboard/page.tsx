@@ -1,11 +1,11 @@
 
+
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getPropertiesByAgent, getAgentById } from "@/lib/data";
 import { Eye, BedDouble, Home, CheckCircle, XCircle, BarChart2, PlusCircle, Edit, Trash2, ArrowUpRight } from "lucide-react";
 import {
   ChartContainer,
@@ -15,28 +15,12 @@ import {
 } from "@/components/ui/chart"
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import Link from "next/link";
+import { useAppContext } from "@/contexts/AppContext";
+import { getAgentById } from "@/lib/data";
 
 
 const agentId = 1; // Simulate logged-in agent
 const agent = getAgentById(agentId);
-const agentProperties = getPropertiesByAgent(agentId);
-
-const totalViews = agentProperties.reduce((acc, p) => acc + p.views, 0);
-const totalInquiries = agentProperties.reduce((acc, p) => acc + p.inquiries, 0);
-const availableProperties = agentProperties.filter(p => p.available).length;
-const occupiedProperties = agentProperties.length - availableProperties;
-
-const chartData = agentProperties.slice(0, 5).map(p => ({
-    name: p.title.split(' ').slice(0,2).join(' '),
-    views: p.views,
-}));
-
-const chartConfig = {
-  views: {
-    label: "Views",
-    color: "hsl(var(--primary))",
-  },
-} satisfies ChartConfig
 
 
 const StatCard = ({ icon: Icon, title, value, change, description }: { icon: React.ElementType, title: string, value: string | number, change?: string, description: string }) => (
@@ -53,6 +37,25 @@ const StatCard = ({ icon: Icon, title, value, change, description }: { icon: Rea
 );
 
 export default function AgentDashboardPage() {
+    const { getPropertiesByAgent } = useAppContext();
+    const agentProperties = getPropertiesByAgent(agentId);
+
+    const totalViews = agentProperties.reduce((acc, p) => acc + p.views, 0);
+    const totalInquiries = agentProperties.reduce((acc, p) => acc + p.inquiries, 0);
+    const availableProperties = agentProperties.filter(p => p.available).length;
+
+    const chartData = agentProperties.slice(0, 5).map(p => ({
+        name: p.title.split(' ').slice(0,2).join(' '),
+        views: p.views,
+    }));
+
+    const chartConfig = {
+      views: {
+        label: "Views",
+        color: "hsl(var(--primary))",
+      },
+    } satisfies ChartConfig
+
 
     if (!agent) {
         return <div>Agent not found.</div>
@@ -65,7 +68,7 @@ export default function AgentDashboardPage() {
               <div className="flex items-center space-x-2">
                 <Button>Download Report</Button>
                 <Button asChild>
-                    <Link href="/agent/add-property"><PlusCircle /> Add New Property</Link>
+                    <Link href="/agent/add-property"><PlusCircle className="mr-2 h-4 w-4" /> Add New Property</Link>
                 </Button>
               </div>
             </div>
@@ -167,8 +170,8 @@ export default function AgentDashboardPage() {
                                     </TableCell>
                                     <TableCell className="hidden md:table-cell text-right">{prop.views}</TableCell>
                                     <TableCell className="text-right">
-                                        <Button variant="ghost" size="icon">
-                                            <Edit className="h-4 w-4" />
+                                        <Button variant="ghost" size="icon" asChild>
+                                            <Link href={`/agent/edit-property/${prop.id}`}><Edit className="h-4 w-4" /></Link>
                                         </Button>
                                         <Button variant="ghost" size="icon" className="text-destructive">
                                             <Trash2 className="h-4 w-4" />

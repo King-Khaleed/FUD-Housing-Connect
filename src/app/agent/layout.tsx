@@ -138,7 +138,7 @@ export default function AgentLayout({
       <SidebarInset>
         <header className="flex items-center justify-between p-4 border-b">
             <SidebarTrigger />
-            <h1 className="text-lg font-semibold">Agent Portal</h1>
+            <h1 className="text-lg font-semibold capitalize">{pathname.split('/').pop()?.replace(/-/g, ' ')}</h1>
             <Button variant="outline" asChild>
                 <a href="/" target="_blank">View Site</a>
             </Button>
