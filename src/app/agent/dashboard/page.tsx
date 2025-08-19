@@ -17,6 +17,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import Link from "next/link";
 import { useAppContext } from "@/contexts/AppContext";
 import { getAgentById } from "@/lib/data";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 
 const agentId = 1; // Simulate logged-in agent
@@ -37,7 +38,7 @@ const StatCard = ({ icon: Icon, title, value, change, description }: { icon: Rea
 );
 
 export default function AgentDashboardPage() {
-    const { getPropertiesByAgent } = useAppContext();
+    const { getPropertiesByAgent, deleteProperty } = useAppContext();
     const agentProperties = getPropertiesByAgent(agentId);
 
     const totalViews = agentProperties.reduce((acc, p) => acc + p.views, 0);
@@ -173,9 +174,26 @@ export default function AgentDashboardPage() {
                                         <Button variant="ghost" size="icon" asChild>
                                             <Link href={`/agent/edit-property/${prop.id}`}><Edit className="h-4 w-4" /></Link>
                                         </Button>
-                                        <Button variant="ghost" size="icon" className="text-destructive">
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
+                                         <AlertDialog>
+                                            <AlertDialogTrigger asChild>
+                                                <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive">
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </AlertDialogTrigger>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader>
+                                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    This action cannot be undone. This will permanently delete your
+                                                    property listing.
+                                                </AlertDialogDescription>
+                                                </AlertDialogHeader>
+                                                <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction onClick={() => deleteProperty(prop.id)}>Continue</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </TableCell>
                                 </TableRow>
                             ))}

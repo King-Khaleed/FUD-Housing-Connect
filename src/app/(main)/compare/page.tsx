@@ -93,12 +93,14 @@ export default function ComparePage() {
                     return <TableCell key={p.id}>{agent ? agent.name : 'N/A'}</TableCell>
                 })}
             </TableRow>
-            <TableRow>
-                <TableCell className="font-semibold pt-4" colSpan={propertiesToCompare.length + 1}>
-                    <h4 className="text-lg font-bold text-foreground">Amenities</h4>
-                    <Separator className="my-2" />
-                </TableCell>
-            </TableRow>
+             {allAmenities.length > 0 && 
+                <TableRow>
+                    <TableCell className="font-semibold pt-4" colSpan={propertiesToCompare.length + 1}>
+                        <h4 className="text-lg font-bold text-foreground">Amenities</h4>
+                        <Separator className="my-2" />
+                    </TableCell>
+                </TableRow>
+            }
             {allAmenities.map(amenity => (
                  <TableRow key={amenity}>
                     <TableCell className="font-semibold">{amenity}</TableCell>
@@ -136,9 +138,22 @@ export default function ComparePage() {
 
       {/* Mobile View: Cards */}
       <div className="lg:hidden space-y-8">
-        {propertiesToCompare.map(p => (
-            <PropertyCard key={p.id} property={p} />
-        ))}
+        {propertiesToCompare.length > 1 ? (
+             propertiesToCompare.map(p => (
+                <PropertyCard key={p.id} property={p} />
+            ))
+        ) : (
+             <div className="text-center py-16 border-2 border-dashed rounded-lg">
+                <Scale className="mx-auto h-12 w-12 text-muted-foreground" />
+                <h3 className="mt-4 text-2xl font-semibold">Add another property</h3>
+                <p className="mt-2 text-muted-foreground">
+                    Add at least one more property to start comparing.
+                </p>
+                <Button asChild className="mt-6">
+                    <Link href="/properties">Browse Properties</Link>
+                </Button>
+             </div>
+        )}
       </div>
     </div>
   );

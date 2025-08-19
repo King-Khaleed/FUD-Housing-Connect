@@ -25,12 +25,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { MoreHorizontal, PlusCircle, Search, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useAppContext } from "@/contexts/AppContext";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import type { Property } from "@/lib/types";
 
 const agentId = 1; // Simulate logged-in agent
 
 export default function AgentPropertiesPage() {
-  const { getPropertiesByAgent } = useAppContext();
+  const { getPropertiesByAgent, deleteProperty, updateProperty } = useAppContext();
   const [searchTerm, setSearchTerm] = useState("");
   const agentProperties = getPropertiesByAgent(agentId);
 
@@ -43,6 +44,10 @@ export default function AgentPropertiesPage() {
   
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(price);
+  };
+  
+  const toggleAvailability = (property: Property) => {
+    updateProperty({ ...property, available: !property.available });
   };
 
 
@@ -121,11 +126,30 @@ export default function AgentPropertiesPage() {
                                 <Edit className="mr-2 h-4 w-4" /> Edit
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
-                              <Trash2 className="mr-2 h-4 w-4" /> Delete
+                            <DropdownMenuItem onClick={() => toggleAvailability(prop)}>
+                               {prop.available ? "Mark as Occupied" : "Mark as Available"}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Mark as Occupied</DropdownMenuItem>
+                             <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive">
+                                        <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                    </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete your
+                                        property listing.
+                                    </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => deleteProperty(prop.id)}>Continue</AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -146,4 +170,3 @@ export default function AgentPropertiesPage() {
     </div>
   );
 }
-

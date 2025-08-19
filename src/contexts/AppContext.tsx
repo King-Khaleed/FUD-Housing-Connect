@@ -16,6 +16,7 @@ interface AppContextType {
   properties: Property[];
   addProperty: (property: Omit<Property, 'id'>) => void;
   updateProperty: (property: Property) => void;
+  deleteProperty: (id: number) => void;
   getPropertyById: (id: number) => Property | undefined;
   getPropertiesByAgent: (agentId: number) => Property[];
 
@@ -81,7 +82,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
   const addProperty = (propertyData: Omit<Property, 'id'>) => {
     setProperties(prev => {
-        const newId = Math.max(...prev.map(p => p.id)) + 1;
+        const newId = Math.max(...prev.map(p => p.id), 0) + 1;
         const newProperty: Property = { ...propertyData, id: newId };
         return [newProperty, ...prev];
     });
@@ -91,6 +92,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     setProperties(prev => prev.map(p => p.id === updatedProperty.id ? updatedProperty : p));
   };
   
+  const deleteProperty = (id: number) => {
+    setProperties(prev => prev.filter(p => p.id !== id));
+     toast({
+        title: "Property Deleted",
+        description: "The property has been successfully removed.",
+    });
+  };
+
   const addRecentlyViewed = (id: number) => {
     setRecentlyViewed(prev => {
         const newHistory = [id, ...prev.filter(pId => pId !== id)];
@@ -105,6 +114,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     properties,
     addProperty,
     updateProperty,
+    deleteProperty,
     getPropertyById,
     getPropertiesByAgent,
     savedProperties,
