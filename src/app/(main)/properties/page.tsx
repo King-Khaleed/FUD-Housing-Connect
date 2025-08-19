@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useState, useMemo, useEffect } from 'react';
@@ -19,6 +20,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
 
 const allAmenities = [...new Set(allProperties.flatMap(p => p.amenities))];
 const roomTypes = [...new Set(allProperties.map(p => p.roomType))];
@@ -31,6 +34,7 @@ export default function PropertiesPage() {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [selectedRoomTypes, setSelectedRoomTypes] = useState<string[]>([]);
   const [selectedDistances, setSelectedDistances] = useState<string[]>([]);
+  const [furnishedStatus, setFurnishedStatus] = useState('any');
   const [sortBy, setSortBy] = useState('dateAdded-desc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [visibleProperties, setVisibleProperties] = useState(9);
@@ -39,6 +43,10 @@ export default function PropertiesPage() {
     const roomTypeFromQuery = searchParams.get('roomType');
     if (roomTypeFromQuery) {
       setSelectedRoomTypes([roomTypeFromQuery]);
+    }
+     const featured = searchParams.get('featured');
+    if (featured === 'true') {
+      setSortBy('views-desc');
     }
   }, [searchParams]);
 
@@ -56,6 +64,13 @@ export default function PropertiesPage() {
       .filter(p => {
         if (selectedDistances.length === 0) return true;
         return selectedDistances.includes(p.location.distanceFromCampus);
+      })
+       .filter(p => {
+        if (furnishedStatus === 'any') return true;
+        const isFurnished = p.amenities.includes('Furnished');
+        if (furnishedStatus === 'furnished') return isFurnished;
+        if (furnishedStatus === 'unfurnished') return !isFurnished;
+        return true;
       })
       .filter(p => 
         p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -75,7 +90,7 @@ export default function PropertiesPage() {
         }
         return 0;
     });
-  }, [searchTerm, priceRange, selectedAmenities, selectedRoomTypes, selectedDistances, sortBy]);
+  }, [searchTerm, priceRange, selectedAmenities, selectedRoomTypes, selectedDistances, sortBy, furnishedStatus]);
 
   const handleAmenityChange = (amenity: string) => {
     setSelectedAmenities(prev =>
@@ -101,6 +116,7 @@ export default function PropertiesPage() {
     setSelectedAmenities([]);
     setSelectedRoomTypes([]);
     setSelectedDistances([]);
+    setFurnishedStatus('any');
   };
 
   const loadMore = () => {
@@ -133,6 +149,28 @@ export default function PropertiesPage() {
             </div>
         </div>
 
+        <Separator />
+        
+        <div>
+            <h3 className="font-semibold text-lg">Furnishing</h3>
+             <RadioGroup defaultValue="any" value={furnishedStatus} onValueChange={setFurnishedStatus} className="mt-2 space-y-2">
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="any" id="any" />
+                    <Label htmlFor="any">Any</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="furnished" id="furnished" />
+                    <Label htmlFor="furnished">Furnished</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="unfurnished" id="unfurnished" />
+                    <Label htmlFor="unfurnished">Unfurnished</Label>
+                </div>
+            </RadioGroup>
+        </div>
+        
+        <Separator />
+
         <div>
             <h3 className="font-semibold text-lg">Room Type</h3>
             <div className="space-y-2 mt-2">
@@ -144,6 +182,8 @@ export default function PropertiesPage() {
                 ))}
             </div>
         </div>
+        
+        <Separator />
 
         <div>
             <h3 className="font-semibold text-lg">Distance from Campus</h3>
@@ -157,10 +197,12 @@ export default function PropertiesPage() {
             </div>
         </div>
 
+        <Separator />
+
         <div>
             <h3 className="font-semibold text-lg">Amenities</h3>
             <div className="space-y-2 mt-2">
-                {allAmenities.map(amenity => (
+                {allAmenities.filter(a => a !== 'Furnished').map(amenity => (
                     <div key={amenity} className="flex items-center space-x-2">
                         <Checkbox id={amenity} onCheckedChange={() => handleAmenityChange(amenity)} checked={selectedAmenities.includes(amenity)} />
                         <Label htmlFor={amenity}>{amenity}</Label>

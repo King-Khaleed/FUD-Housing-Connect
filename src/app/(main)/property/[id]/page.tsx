@@ -1,8 +1,11 @@
 
+"use client"
+
+import { useEffect } from 'react';
 import { getPropertyById, getAgentById, properties as allProperties } from '@/lib/data';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { MapPin, BedDouble, Bath, Wifi, Zap, Shield, Car, Utensils, Check, Calendar, Eye, MessageSquare } from 'lucide-react';
+import { MapPin, BedDouble, Bath, Wifi, Zap, Shield, Car, Utensils, Check, Calendar, Eye, MessageSquare, Clock, Star, Share2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -19,6 +22,8 @@ import { SaveButton } from '@/components/SaveButton';
 import { WhatsAppButton } from '@/components/WhatsAppButton';
 import { PropertyCard } from '@/components/PropertyCard';
 import { CompareButton } from '@/components/CompareButton';
+import { useAppContext } from '@/contexts/AppContext';
+import { useToast } from '@/hooks/use-toast';
 
 const amenityIcons: { [key: string]: React.ElementType } = {
   Water: Bath,
@@ -27,10 +32,20 @@ const amenityIcons: { [key: string]: React.ElementType } = {
   WiFi: Wifi,
   Parking: Car,
   Kitchen: Utensils,
+  Furnished: BedDouble,
 };
 
 export default function PropertyDetailPage({ params }: { params: { id: string } }) {
-  const property = getPropertyById(Number(params.id));
+  const propertyId = Number(params.id);
+  const { addRecentlyViewed } = useAppContext();
+  const { toast } = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    addRecentlyViewed(propertyId);
+  }, [propertyId, addRecentlyViewed]);
+
+  const property = getPropertyById(propertyId);
 
   if (!property) {
     notFound();
@@ -45,6 +60,24 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(price);
   };
+  
+  const handleShare = () => {
+    if(navigator.share) {
+        navigator.share({
+            title: property.title,
+            text: `Check out this property on FUD Housing Connect: ${property.title}`,
+            url: window.location.href,
+        })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        toast({
+            title: "Link Copied",
+            description: "Property link has been copied to your clipboard.",
+        })
+    }
+  }
 
   return (
     <div className="container mx-auto py-8">
@@ -80,7 +113,10 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                             <span>{property.location.address}</span>
                         </div>
                     </div>
-                    <SaveButton propertyId={property.id} className="w-12 h-12" />
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" size="icon" onClick={handleShare}><Share2 className="h-5 w-5" /></Button>
+                        <SaveButton propertyId={property.id} className="w-12 h-12" />
+                    </div>
                 </div>
                 <div className="flex flex-wrap gap-2 mt-4">
                     <Badge variant="secondary" className="text-sm">{property.roomType}</Badge>
@@ -131,6 +167,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
             </CardHeader>
             <CardContent className="space-y-2">
               {agent && (
+                <>
                 <div className="flex items-center gap-4 mb-4">
                   <Avatar className="h-16 w-16">
                     <AvatarImage src={agent.profileImage} alt={agent.name} data-ai-hint="person portrait" />
@@ -141,6 +178,14 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
                     <p className="text-sm text-muted-foreground">{agent.verificationLevel} Agent</p>
                   </div>
                 </div>
+                 <Separator className="my-4" />
+                <p className="text-sm text-muted-foreground italic">{agent.bio}</p>
+                <div className="space-y-2 pt-2">
+                    <div className="flex items-center gap-2 text-sm"><Clock className="w-4 h-4 text-primary" /><span>{agent.responseTime}</span></div>
+                    <div className="flex items-center gap-2 text-sm"><Star className="w-4 h-4 text-primary" /><span>{agent.rating} ({agent.totalReviews} reviews)</span></div>
+                </div>
+                <Separator className="my-4" />
+                </>
               )}
                {agent && <WhatsAppButton agent={agent} property={property} />}
               <Button variant="outline" className="w-full">Schedule a Tour</Button>

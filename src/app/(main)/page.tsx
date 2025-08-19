@@ -1,9 +1,12 @@
+
+"use client"
+
 import Link from 'next/link';
-import { properties } from '@/lib/data';
+import { properties as allProperties } from '@/lib/data';
 import { PropertyCard } from '@/components/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, SlidersHorizontal, ArrowRight } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowRight, History } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -12,11 +15,16 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Badge } from '@/components/ui/badge';
+import { useAppContext } from '@/contexts/AppContext';
+import { Separator } from '@/components/ui/separator';
 
 export default function HomePage() {
-  const featuredProperties = properties.filter(p => p.featured).slice(0, 5);
-  const recentProperties = [...properties].sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()).slice(0, 6);
-  const categories = [...new Set(properties.map(p => p.roomType))];
+  const { recentlyViewed } = useAppContext();
+  const featuredProperties = allProperties.filter(p => p.featured).slice(0, 5);
+  const recentProperties = [...allProperties].sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()).slice(0, 6);
+  const categories = [...new Set(allProperties.map(p => p.roomType))];
+  
+  const recentlyViewedProperties = allProperties.filter(p => recentlyViewed.includes(p.id)).sort((a, b) => recentlyViewed.indexOf(a.id) - recentlyViewed.indexOf(b.id));
 
   return (
     <div className="flex flex-col">
@@ -63,6 +71,22 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      
+      {recentlyViewedProperties.length > 0 && (
+        <section className="w-full py-12 md:py-24">
+            <div className="container px-4 md:px-6">
+                 <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-3xl font-bold font-headline tracking-tighter sm:text-4xl flex items-center gap-2"><History className="w-8 h-8"/> Recently Viewed</h2>
+                </div>
+                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                    {recentlyViewedProperties.map((prop) => (
+                    <PropertyCard key={prop.id} property={prop} />
+                    ))}
+                </div>
+            </div>
+        </section>
+      )}
+
 
       <section className="w-full py-12 md:py-24">
         <div className="container px-4 md:px-6">

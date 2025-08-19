@@ -28,6 +28,9 @@ interface AppContextType {
   toggleCompareProperty: (id: number) => void;
   isPropertyForCompare: (id: number) => boolean;
   clearCompare: () => void;
+
+  recentlyViewed: number[];
+  addRecentlyViewed: (id: number) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -37,6 +40,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [savedProperties, setSavedProperties] = useLocalStorage<number[]>('savedProperties', []);
   const [compareProperties, setCompareProperties] = useLocalStorage<number[]>('compareProperties', []);
   const [properties, setProperties] = useState<Property[]>(initialProperties);
+  const [recentlyViewed, setRecentlyViewed] = useLocalStorage<number[]>('recentlyViewed', []);
   const { toast } = useToast();
 
   const toggleSavedProperty = (id: number) => {
@@ -86,6 +90,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const updateProperty = (updatedProperty: Property) => {
     setProperties(prev => prev.map(p => p.id === updatedProperty.id ? updatedProperty : p));
   };
+  
+  const addRecentlyViewed = (id: number) => {
+    setRecentlyViewed(prev => {
+        const newHistory = [id, ...prev.filter(pId => pId !== id)];
+        return newHistory.slice(0, 4); // Keep only the last 4 viewed properties
+    });
+  };
 
 
   const value = {
@@ -104,6 +115,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     toggleCompareProperty,
     isPropertyForCompare,
     clearCompare,
+    recentlyViewed,
+    addRecentlyViewed,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
