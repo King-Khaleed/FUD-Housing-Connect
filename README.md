@@ -65,8 +65,8 @@ This project is built with a modern, robust, and scalable technology stack:
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/[username]/fud-housing-connect.git
-    cd fud-housing-connect
+    git clone https://github.com/King-Khaleed/FUD-Housing-Connect.git
+    cd FUD-Housing-Connect
     ```
 
 2.  Install dependencies:
@@ -75,20 +75,26 @@ This project is built with a modern, robust, and scalable technology stack:
     # or
     yarn install
     ```
+    
+3.  Set up your environment variables. Create a file named `.env` in the root of your project and add your Google AI API key:
+    ```bash
+    # Create the file
+    touch .env
+    
+    # Add your key to the .env file
+    GEMINI_API_KEY=YOUR_API_KEY_HERE
+    ```
+    You can get a Gemini API key from [Google AI for Developers](https://ai.google.dev/).
 
-3.  Run the development server:
+4.  Run the development server:
     ```bash
     npm run dev
     ```
 
-4.  Open [http://localhost:9002](http://localhost:9002) in your browser to view the application.
+5.  Open [http://localhost:9002](http://localhost:9002) in your browser to view the application.
 
-### Environment Variables
-Create a `.env` file in the root directory for any future environment variables:
-```
-# Add any environment variables here when a backend is integrated
-# e.g., GOOGLE_API_KEY=
-```
+### Environment Variables for Production
+When deploying to a service like Netlify or Vercel, you must set the `GEMINI_API_KEY` in your hosting provider's environment variable settings. Do not commit your `.env` file.
 
 ## 📁 Project Structure
 
