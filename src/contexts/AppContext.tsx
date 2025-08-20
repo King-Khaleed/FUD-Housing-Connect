@@ -1,8 +1,7 @@
 
 "use client"
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import useLocalStorage from '@/hooks/use-local-storage';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import type { Property } from '@/lib/types';
 import { properties as initialProperties } from '@/lib/data';
@@ -37,11 +36,11 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [userMode, setUserMode] = useLocalStorage<UserMode>('userMode', 'student');
-  const [savedProperties, setSavedProperties] = useLocalStorage<number[]>('savedProperties', []);
-  const [compareProperties, setCompareProperties] = useLocalStorage<number[]>('compareProperties', []);
+  const [userMode, setUserMode] = useState<UserMode>('student');
+  const [savedProperties, setSavedProperties] = useState<number[]>([]);
+  const [compareProperties, setCompareProperties] = useState<number[]>([]);
   const [properties, setProperties] = useState<Property[]>(initialProperties);
-  const [recentlyViewed, setRecentlyViewed] = useLocalStorage<number[]>('recentlyViewed', []);
+  const [recentlyViewed, setRecentlyViewed] = useState<number[]>([]);
   const { toast } = useToast();
 
   const toggleSavedProperty = (id: number) => {

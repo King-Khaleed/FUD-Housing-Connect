@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Heart, Bot, Info, HelpCircle, Home, Menu } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { UserModeToggle } from "@/components/UserModeToggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -43,8 +42,10 @@ export function Header() {
                 </Link>
               </Button>
             ))}
+             <Button variant="outline" asChild>
+                <Link href="/agent/dashboard">Agent Portal</Link>
+            </Button>
           </nav>
-          <UserModeToggle />
            <div className="md:hidden">
               <Sheet>
                   <SheetTrigger asChild>
@@ -55,10 +56,10 @@ export function Header() {
                   </SheetTrigger>
                   <SheetContent side="right">
                       <SheetHeader>
-                        <SheetTitle className="sr-only">Main Menu</SheetTitle>
                         <SheetClose asChild>
                             <Logo />
                         </SheetClose>
+                        <SheetTitle className="sr-only">Main Menu</SheetTitle>
                       </SheetHeader>
                       <nav className="grid gap-2 text-lg font-medium mt-4">
                           {navLinks.map((link) => (
@@ -75,6 +76,15 @@ export function Header() {
                               </Link>
                            </SheetClose>
                           ))}
+                           <SheetClose asChild>
+                              <Link
+                                href="/agent/dashboard"
+                                className="flex items-center gap-4 px-2.5 py-2 rounded-lg text-muted-foreground hover:text-foreground"
+                              >
+                                <Home className="h-5 w-5" />
+                                Agent Portal
+                              </Link>
+                           </SheetClose>
                       </nav>
                   </SheetContent>
               </Sheet>
