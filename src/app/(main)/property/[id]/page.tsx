@@ -1,11 +1,11 @@
 
 "use client"
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getPropertyById, getAgentById, properties as allProperties } from '@/lib/data';
 import { notFound, useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
-import { MapPin, BedDouble, Bath, Wifi, Zap, Shield, Car, Utensils, Check, Calendar, Eye, MessageSquare, Clock, Star, Share2 } from 'lucide-react';
+import { MapPin, BedDouble, Bath, Wifi, Zap, Shield, Car, Utensils, Check, Calendar, Eye, MessageSquare, Clock, Star, Share2, Loader2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -24,6 +24,7 @@ import { PropertyCard } from '@/components/PropertyCard';
 import { CompareButton } from '@/components/CompareButton';
 import { useAppContext } from '@/contexts/AppContext';
 import { useToast } from '@/hooks/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const amenityIcons: { [key: string]: React.ElementType } = {
   Water: Bath,
@@ -38,17 +39,38 @@ const amenityIcons: { [key: string]: React.ElementType } = {
 export default function PropertyDetailPage() {
   const params = useParams();
   const propertyId = Number(params.id);
-  const { addRecentlyViewed } = useAppContext();
+  const { addRecentlyViewed, getPropertyById: getPropertyFromContext } = useAppContext();
   const { toast } = useToast();
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    addRecentlyViewed(propertyId);
+    if (propertyId) {
+        addRecentlyViewed(propertyId);
+        setIsLoading(false);
+    }
   }, [propertyId, addRecentlyViewed]);
 
-  const property = getPropertyById(propertyId);
+  const property = getPropertyFromContext(propertyId);
+
+  if (isLoading) {
+    return (
+        <div className="container mx-auto py-8">
+            <div className="grid md:grid-cols-3 gap-8">
+                <div className="md:col-span-2 space-y-4">
+                    <Skeleton className="h-[500px] w-full rounded-lg" />
+                    <Skeleton className="h-48 w-full" />
+                </div>
+                <div className="space-y-8">
+                    <Skeleton className="h-64 w-full" />
+                    <Skeleton className="h-64 w-full" />
+                </div>
+            </div>
+        </div>
+    )
+  }
 
   if (!property) {
+    // This part will run if the property is not found after loading
     notFound();
   }
 
