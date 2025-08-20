@@ -1,11 +1,12 @@
 
 "use client";
 
-import { Scales, Plus, Check } from "lucide-react";
+import { Plus, Check } from "lucide-react";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 interface CompareButtonProps extends ButtonProps {
   propertyId: number;
@@ -13,8 +14,13 @@ interface CompareButtonProps extends ButtonProps {
 
 export function CompareButton({ propertyId, className, ...props }: CompareButtonProps) {
   const { isPropertyForCompare, toggleCompareProperty, compareProperties } = useAppContext();
+  const [isMounted, setIsMounted] = useState(false);
   const selected = isPropertyForCompare(propertyId);
   const { toast } = useToast();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -35,6 +41,20 @@ export function CompareButton({ propertyId, className, ...props }: CompareButton
       description: selected ? "Property removed from your comparison list." : "Property added to your comparison list.",
     });
   };
+  
+  if (!isMounted) {
+      return (
+          <Button
+            variant="outline"
+            className={cn("w-full", className)}
+            disabled
+            {...props}
+          >
+              <Plus className="mr-2 h-4 w-4" />
+              Add to Compare
+          </Button>
+      )
+  }
 
   return (
     <Button

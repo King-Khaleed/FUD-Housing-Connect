@@ -1,14 +1,16 @@
 
+"use client"
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, BedDouble, Bath, Heart, CheckCircle } from 'lucide-react';
+import { MapPin, BedDouble, CheckCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { SaveButton } from '@/components/SaveButton';
 import type { Property } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { CompareButton } from './CompareButton';
-import { Button } from './ui/button';
+import { useEffect, useState } from 'react';
 
 interface PropertyCardProps {
   property: Property;
@@ -16,9 +18,19 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, className }: PropertyCardProps) {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', minimumFractionDigits: 0 }).format(price);
   };
+  
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Card className={cn("overflow-hidden hover:shadow-lg transition-shadow duration-300 group flex flex-col", className)}>

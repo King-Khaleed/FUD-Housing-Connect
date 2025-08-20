@@ -7,10 +7,11 @@ import { Heart, Bot, Info, HelpCircle, Home, Menu } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader } from "@/components/ui/sheet";
 
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
+  { href: "/properties", label: "Properties", icon: Home },
   { href: "/saved", label: "Saved", icon: Heart },
   { href: "/ai-assistant", label: "AI Assistant", icon: Bot },
   { href: "/about", label: "About", icon: Info },
@@ -59,7 +60,6 @@ export function Header() {
                         <SheetClose asChild>
                             <Logo />
                         </SheetClose>
-                        <SheetTitle className="sr-only">Main Menu</SheetTitle>
                       </SheetHeader>
                       <nav className="grid gap-2 text-lg font-medium mt-4">
                           {navLinks.map((link) => (

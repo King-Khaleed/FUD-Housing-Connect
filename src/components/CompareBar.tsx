@@ -9,14 +9,20 @@ import { Button } from "./ui/button";
 import { X, Scale, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "./ui/card";
+import { useEffect, useState } from "react";
 
 export function CompareBar() {
   const { compareProperties, toggleCompareProperty, clearCompare } = useAppContext();
   const { toast } = useToast();
+  const [isMounted, setIsMounted] = useState(false);
   
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const propertiesToCompare = allProperties.filter(p => compareProperties.includes(p.id));
 
-  if (propertiesToCompare.length === 0) {
+  if (!isMounted || propertiesToCompare.length === 0) {
     return null;
   }
 

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Heart } from "lucide-react";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAppContext } from "@/contexts/AppContext";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 interface SaveButtonProps {
   propertyId: number;
@@ -13,8 +15,13 @@ interface SaveButtonProps {
 
 export function SaveButton({ propertyId, className }: SaveButtonProps) {
   const { isPropertySaved, toggleSavedProperty } = useAppContext();
+  const [isMounted, setIsMounted] = useState(false);
   const saved = isPropertySaved(propertyId);
   const { toast } = useToast();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,6 +32,19 @@ export function SaveButton({ propertyId, className }: SaveButtonProps) {
         description: saved ? "Removed from your saved list." : "Added to your saved list.",
     })
   };
+  
+  if (!isMounted) {
+      return (
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("rounded-full", className)}
+            disabled
+          >
+              <Heart className="h-5 w-5 text-gray-500" />
+          </Button>
+      )
+  }
 
   return (
     <Button

@@ -1,17 +1,12 @@
 
 "use client"
 
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import type { Property } from '@/lib/types';
 import { properties as initialProperties } from '@/lib/data';
 
-type UserMode = 'student' | 'agent';
-
 interface AppContextType {
-  userMode: UserMode;
-  setUserMode: (mode: UserMode) => void;
-  
   properties: Property[];
   addProperty: (property: Omit<Property, 'id'>) => void;
   updateProperty: (property: Property) => void;
@@ -36,7 +31,6 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [userMode, setUserMode] = useState<UserMode>('student');
   const [savedProperties, setSavedProperties] = useState<number[]>([]);
   const [compareProperties, setCompareProperties] = useState<number[]>([]);
   const [properties, setProperties] = useState<Property[]>(initialProperties);
@@ -108,8 +102,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
 
   const value = {
-    userMode,
-    setUserMode,
     properties,
     addProperty,
     updateProperty,
