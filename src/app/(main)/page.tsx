@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/carousel";
 import { Badge } from '@/components/ui/badge';
 import { useAppContext } from '@/contexts/AppContext';
-import { Separator } from '@/components/ui/separator';
 import { useState, useEffect } from 'react';
 
 export default function HomePage() {
@@ -124,21 +123,18 @@ export default function HomePage() {
           <Carousel
             opts={{
               align: "start",
-              loop: true,
             }}
             className="w-full"
           >
-            <CarouselContent>
+            <CarouselContent className="-ml-1">
               {featuredProperties.map((prop) => (
-                <CarouselItem key={prop.id} className="md:basis-1/2 lg:basis-1/3">
-                  <div className="p-1">
-                    <PropertyCard property={prop} />
-                  </div>
+                <CarouselItem key={prop.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <PropertyCard property={prop} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden sm:flex" />
+            <CarouselNext className="hidden sm:flex" />
           </Carousel>
         </div>
       </section>

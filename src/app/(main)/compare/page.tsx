@@ -54,18 +54,21 @@ export default function ComparePage() {
       </div>
 
       {/* Desktop View: Table */}
-      <div className="hidden lg:block">
-        <Table className="border">
+      <div className="hidden lg:block overflow-x-auto">
+        <Table className="border min-w-[1024px]">
           <TableHeader>
             <TableRow>
               <TableHead className="font-semibold text-lg w-[200px]">Feature</TableHead>
               {propertiesToCompare.map(p => (
                 <TableHead key={p.id}>
                    <div className="relative h-48 w-full rounded-md overflow-hidden mb-2">
-                     <Image src={p.images[0]} alt={p.title} layout="fill" objectFit="cover" data-ai-hint="apartment exterior" />
+                     <Image src={p.images[0]} alt={p.title} fill objectFit="cover" data-ai-hint="apartment exterior" />
                    </div>
                    <h3 className="font-bold text-base text-foreground">{p.title}</h3>
                 </TableHead>
+              ))}
+               {Array.from({ length: 3 - propertiesToCompare.length }).map((_, i) => (
+                <TableHead key={`placeholder-${i}`}></TableHead>
               ))}
             </TableRow>
           </TableHeader>
@@ -138,22 +141,9 @@ export default function ComparePage() {
 
       {/* Mobile View: Cards */}
       <div className="lg:hidden space-y-8">
-        {propertiesToCompare.length > 1 ? (
-             propertiesToCompare.map(p => (
-                <PropertyCard key={p.id} property={p} />
-            ))
-        ) : (
-             <div className="text-center py-16 border-2 border-dashed rounded-lg">
-                <Scale className="mx-auto h-12 w-12 text-muted-foreground" />
-                <h3 className="mt-4 text-2xl font-semibold">Add another property</h3>
-                <p className="mt-2 text-muted-foreground">
-                    Add at least one more property to start comparing.
-                </p>
-                <Button asChild className="mt-6">
-                    <Link href="/properties">Browse Properties</Link>
-                </Button>
-             </div>
-        )}
+        {propertiesToCompare.map(p => (
+            <PropertyCard key={p.id} property={p} />
+        ))}
       </div>
     </div>
   );
