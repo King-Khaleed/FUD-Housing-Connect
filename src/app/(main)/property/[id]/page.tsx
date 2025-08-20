@@ -35,8 +35,8 @@ const amenityIcons: { [key: string]: React.ElementType } = {
   Furnished: BedDouble,
 };
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
-  const propertyId = Number(params.id);
+export default function PropertyDetailPage({ params: { id } }: { params: { id: string } }) {
+  const propertyId = Number(id);
   const { addRecentlyViewed } = useAppContext();
   const { toast } = useToast();
   const router = useRouter();
