@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 // A more robust implementation of useLocalStorage that handles server-side rendering
 // and prevents hydration mismatches and infinite loops.
@@ -27,9 +27,9 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val
     }
   });
 
-  // Return a wrapped version of useState's setter function that ...
-  // ... persists the new value to localStorage.
-  const setValue = (value: T | ((val: T) => T)) => {
+  // Wrap setValue in useCallback to prevent it from being recreated on every render.
+  // This is crucial for preventing infinite loops when the setter is passed down in context.
+  const setValue = useCallback((value: T | ((val: T) => T)) => {
     try {
       // Allow value to be a function so we have the same API as useState
       const valueToStore = value instanceof Function ? value(storedValue) : value;
@@ -43,7 +43,7 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val
       // A more advanced implementation would handle the error case
       console.error(error);
     }
-  };
+  }, [key, storedValue]);
 
   // This useEffect is to sync changes across tabs
   useEffect(() => {
