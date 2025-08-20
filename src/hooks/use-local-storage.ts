@@ -31,19 +31,21 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val
   // This is crucial for preventing infinite loops when the setter is passed down in context.
   const setValue = useCallback((value: T | ((val: T) => T)) => {
     try {
-      // Allow value to be a function so we have the same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      // Save state
-      setStoredValue(valueToStore);
-      // Save to local storage
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      }
+      // Use the functional update form of useState's setter.
+      // This allows us to get the latest state without including it in the dependency array.
+      setStoredValue(currentValue => {
+        const valueToStore = value instanceof Function ? value(currentValue) : value;
+        // Save to local storage
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+        return valueToStore;
+      });
     } catch (error) {
       // A more advanced implementation would handle the error case
       console.error(error);
     }
-  }, [key, storedValue]);
+  }, [key]);
 
   // This useEffect is to sync changes across tabs
   useEffect(() => {
