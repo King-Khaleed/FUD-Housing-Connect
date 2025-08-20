@@ -17,9 +17,16 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useAppContext } from '@/contexts/AppContext';
 import { Separator } from '@/components/ui/separator';
+import { useState, useEffect } from 'react';
 
 export default function HomePage() {
   const { recentlyViewed } = useAppContext();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const featuredProperties = allProperties.filter(p => p.featured).slice(0, 5);
   const recentProperties = [...allProperties].sort((a, b) => new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()).slice(0, 6);
   const categories = [...new Set(allProperties.map(p => p.roomType))];
@@ -72,7 +79,7 @@ export default function HomePage() {
         </div>
       </section>
       
-      {recentlyViewedProperties.length > 0 && (
+      {isMounted && recentlyViewedProperties.length > 0 && (
         <section className="w-full py-12 md:py-24">
             <div className="container px-4 md:px-6">
                  <div className="flex items-center justify-between mb-8">
