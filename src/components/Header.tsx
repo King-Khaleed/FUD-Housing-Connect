@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, Bot, Info, HelpCircle, Home, Menu } from "lucide-react";
+import { Bot, HelpCircle, Home, Menu } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -12,9 +12,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetHeader } from "@/co
 const navLinks = [
   { href: "/", label: "Home", icon: Home },
   { href: "/properties", label: "Properties", icon: Home },
-  { href: "/saved", label: "Saved", icon: Heart },
   { href: "/ai-assistant", label: "AI Assistant", icon: Bot },
-  { href: "/about", label: "About", icon: Info },
   { href: "/help", label: "Help", icon: HelpCircle },
 ];
 

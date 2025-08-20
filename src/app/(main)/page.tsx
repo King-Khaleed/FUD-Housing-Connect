@@ -6,7 +6,7 @@ import { properties as allProperties } from '@/lib/data';
 import { PropertyCard } from '@/components/PropertyCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, SlidersHorizontal, ArrowRight, History } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowRight, History, Heart, Info } from 'lucide-react';
 import {
   Carousel,
   CarouselContent,
@@ -17,6 +17,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useAppContext } from '@/contexts/AppContext';
 import { useState, useEffect } from 'react';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function HomePage() {
   const { recentlyViewed } = useAppContext();
@@ -126,9 +127,9 @@ export default function HomePage() {
             }}
             className="w-full"
           >
-            <CarouselContent className="-ml-1">
+            <CarouselContent>
               {featuredProperties.map((prop) => (
-                <CarouselItem key={prop.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                <CarouselItem key={prop.id} className="basis-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3">
                   <PropertyCard property={prop} />
                 </CarouselItem>
               ))}
@@ -136,6 +137,39 @@ export default function HomePage() {
             <CarouselPrevious className="hidden sm:flex" />
             <CarouselNext className="hidden sm:flex" />
           </Carousel>
+        </div>
+      </section>
+
+      <section className="w-full py-12 md:py-24">
+        <div className="container px-4 md:px-6">
+           <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+                <h2 className="text-3xl font-bold font-headline tracking-tighter sm:text-4xl">Explore More</h2>
+                <p className="max-w-[700px] text-muted-foreground md:text-lg">Find your saved properties or learn more about our mission.</p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+                <Link href="/saved">
+                    <Card className="group hover:bg-primary/5 transition-colors">
+                        <CardHeader className="flex flex-row items-center gap-4">
+                            <Heart className="w-8 h-8 text-primary"/>
+                            <div>
+                                <CardTitle>Saved Properties</CardTitle>
+                                <CardDescription>Revisit the properties you've saved for later.</CardDescription>
+                            </div>
+                        </CardHeader>
+                    </Card>
+                </Link>
+                 <Link href="/about">
+                    <Card className="group hover:bg-primary/5 transition-colors">
+                        <CardHeader className="flex flex-row items-center gap-4">
+                            <Info className="w-8 h-8 text-primary"/>
+                            <div>
+                                <CardTitle>About Us</CardTitle>
+                                <CardDescription>Learn more about our mission and the team.</CardDescription>
+                            </div>
+                        </CardHeader>
+                    </Card>
+                </Link>
+            </div>
         </div>
       </section>
 
