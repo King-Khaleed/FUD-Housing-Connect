@@ -1,7 +1,7 @@
 
 "use client"
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import type { Property } from '@/lib/types';
 import { properties as initialProperties } from '@/lib/data';
@@ -37,17 +37,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [recentlyViewed, setRecentlyViewed] = useState<number[]>([]);
   const { toast } = useToast();
 
-  const toggleSavedProperty = (id: number) => {
+  const toggleSavedProperty = useCallback((id: number) => {
     setSavedProperties(prev => 
       prev.includes(id) ? prev.filter(pId => pId !== id) : [...prev, id]
     );
-  };
+  }, []);
 
-  const isPropertySaved = (id: number) => savedProperties.includes(id);
+  const isPropertySaved = useCallback((id: number) => savedProperties.includes(id), [savedProperties]);
   
-  const clearSavedProperties = () => setSavedProperties([]);
+  const clearSavedProperties = useCallback(() => setSavedProperties([]), []);
 
-  const toggleCompareProperty = (id: number) => {
+  const toggleCompareProperty = useCallback((id: number) => {
     setCompareProperties(prev => {
         if(prev.includes(id)) {
             return prev.filter(pId => pId !== id);
@@ -63,42 +63,42 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             return prev;
         }
     });
-  };
+  }, [toast]);
 
-  const isPropertyForCompare = (id: number) => compareProperties.includes(id);
+  const isPropertyForCompare = useCallback((id: number) => compareProperties.includes(id), [compareProperties]);
 
-  const clearCompare = () => setCompareProperties([]);
+  const clearCompare = useCallback(() => setCompareProperties([]), []);
 
-  const getPropertyById = (id: number) => properties.find(p => p.id === id);
+  const getPropertyById = useCallback((id: number) => properties.find(p => p.id === id), [properties]);
 
-  const getPropertiesByAgent = (agentId: number) => properties.filter(p => p.agentId === agentId);
+  const getPropertiesByAgent = useCallback((agentId: number) => properties.filter(p => p.agentId === agentId), [properties]);
 
-  const addProperty = (propertyData: Omit<Property, 'id'>) => {
+  const addProperty = useCallback((propertyData: Omit<Property, 'id'>) => {
     setProperties(prev => {
         const newId = Math.max(...prev.map(p => p.id), 0) + 1;
         const newProperty: Property = { ...propertyData, id: newId };
         return [newProperty, ...prev];
     });
-  };
+  }, []);
 
-  const updateProperty = (updatedProperty: Property) => {
+  const updateProperty = useCallback((updatedProperty: Property) => {
     setProperties(prev => prev.map(p => p.id === updatedProperty.id ? updatedProperty : p));
-  };
+  }, []);
   
-  const deleteProperty = (id: number) => {
+  const deleteProperty = useCallback((id: number) => {
     setProperties(prev => prev.filter(p => p.id !== id));
      toast({
         title: "Property Deleted",
         description: "The property has been successfully removed.",
     });
-  };
+  }, [toast]);
 
-  const addRecentlyViewed = (id: number) => {
+  const addRecentlyViewed = useCallback((id: number) => {
     setRecentlyViewed(prev => {
         const newHistory = [id, ...prev.filter(pId => pId !== id)];
         return newHistory.slice(0, 4); // Keep only the last 4 viewed properties
     });
-  };
+  }, []);
 
 
   const value = {
