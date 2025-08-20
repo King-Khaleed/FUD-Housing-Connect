@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { properties as allProperties } from '@/lib/data';
 import type { Property } from '@/lib/types';
@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, LayoutGrid, List, X } from 'lucide-react';
+import { Search, LayoutGrid, List, X, Loader2 } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -27,7 +27,7 @@ const allAmenities = [...new Set(allProperties.flatMap(p => p.amenities))];
 const roomTypes = [...new Set(allProperties.map(p => p.roomType))];
 const distances = ['Walking distance', '5-10 mins drive', '10+ mins drive'];
 
-export default function PropertiesPage() {
+function PropertiesPageContent() {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([50000, 500000]);
@@ -292,4 +292,18 @@ export default function PropertiesPage() {
       </div>
     </div>
   );
+}
+
+const LoadingFallback = () => (
+    <div className="flex justify-center items-center h-[calc(100vh-200px)]">
+        <Loader2 className="w-10 h-10 animate-spin text-primary" />
+    </div>
+);
+
+export default function PropertiesPage() {
+    return (
+        <Suspense fallback={<LoadingFallback />}>
+            <PropertiesPageContent />
+        </Suspense>
+    );
 }
