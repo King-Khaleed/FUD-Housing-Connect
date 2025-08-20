@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import { getPropertyById, getAgentById, properties as allProperties } from '@/lib/data';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound, useRouter, useParams } from 'next/navigation';
 import Image from 'next/image';
 import { MapPin, BedDouble, Bath, Wifi, Zap, Shield, Car, Utensils, Check, Calendar, Eye, MessageSquare, Clock, Star, Share2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -35,8 +35,9 @@ const amenityIcons: { [key: string]: React.ElementType } = {
   Furnished: BedDouble,
 };
 
-export default function PropertyDetailPage({ params: { id } }: { params: { id: string } }) {
-  const propertyId = Number(id);
+export default function PropertyDetailPage() {
+  const params = useParams();
+  const propertyId = Number(params.id);
   const { addRecentlyViewed } = useAppContext();
   const { toast } = useToast();
   const router = useRouter();
