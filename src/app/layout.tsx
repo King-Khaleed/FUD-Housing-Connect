@@ -16,7 +16,7 @@ const fontSpaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'FUD Housing Connect',
+  title: 'Student Housing Connect',
   description: 'Find Your Perfect Home Near FUD Campus',
 };
 

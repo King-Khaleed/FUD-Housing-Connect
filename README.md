@@ -1,6 +1,6 @@
-# 🏠 FUD Housing Connect
+# 🏠 Student Housing Connect
 
-A modern student housing rental platform connecting Federal University Dutse (FUD) students with verified property agents and landlords for seamless off-campus accommodation discovery.
+A modern student housing rental platform connecting students with verified property agents and landlords for seamless off-campus accommodation discovery.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14+-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18+-blue?style=flat-square&logo=react)](https://reactjs.org/)
@@ -10,7 +10,7 @@ A modern student housing rental platform connecting Federal University Dutse (FU
 
 ## Overview
 
-FUD Housing Connect is a web application designed to simplify the process of finding off-campus housing for students at the Federal University Dutse, Jigawa State, Nigeria. The platform addresses the common challenges students face, such as dependency on word-of-mouth, the difficulty of verifying agent credibility, and the time-consuming nature of physical property hunting.
+Student Housing Connect is a web application designed to simplify the process of finding off-campus housing for students at the Federal University Dutse, Jigawa State, Nigeria. The platform addresses the common challenges students face, such as dependency on word-of-mouth, the difficulty of verifying agent credibility, and the time-consuming nature of physical property hunting.
 
 Our goal is to provide a centralized, trustworthy, and user-friendly hub where students can browse, compare, and connect with property agents securely and efficiently.
 
@@ -65,8 +65,8 @@ This project is built with a modern, robust, and scalable technology stack:
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/King-Khaleed/FUD-Housing-Connect.git
-    cd FUD-Housing-Connect
+    git clone https://github.com/King-Khaleed/Student-Housing-Connect.git
+    cd Student-Housing-Connect
     ```
 
 2.  Install dependencies:

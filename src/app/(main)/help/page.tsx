@@ -41,7 +41,7 @@ export default function HelpPage() {
                 Help & Support
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                Your guide to using FUD Housing Connect. Find answers to common questions below.
+                Your guide to using Student Housing Connect. Find answers to common questions below.
             </p>
         </section>
 
@@ -98,7 +98,7 @@ export default function HelpPage() {
                         <p className="text-sm text-muted-foreground">If you can't find the answer you're looking for, please reach out to us.</p>
                         <div className="flex items-center gap-2">
                             <Mail className="h-4 w-4 text-primary" />
-                            <a href="mailto:support@fudhousing.com" className="hover:underline">support@fudhousing.com</a>
+                            <a href="mailto:support@studenthousingconnect.com" className="hover:underline">support@studenthousingconnect.com</a>
                         </div>
                         <div className="flex items-center gap-2">
                             <Phone className="h-4 w-4 text-primary" />

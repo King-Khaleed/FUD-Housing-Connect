@@ -88,7 +88,7 @@ export default function PropertyDetailPage() {
     if(navigator.share) {
         navigator.share({
             title: property.title,
-            text: `Check out this property on FUD Housing Connect: ${property.title}`,
+            text: `Check out this property on Student Housing Connect: ${property.title}`,
             url: window.location.href,
         })
         .then(() => console.log('Successful share'))

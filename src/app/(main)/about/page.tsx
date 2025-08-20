@@ -31,7 +31,7 @@ export default function AboutPage() {
         
         <section className="text-center">
             <h1 className="text-4xl font-bold font-headline tracking-tight lg:text-5xl">
-                About FUD Housing Connect
+                About Student Housing Connect
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
                 Bridging the gap between students and trusted off-campus housing near Federal University Dutse.
@@ -42,7 +42,7 @@ export default function AboutPage() {
           <div className="space-y-4">
             <h2 className="text-3xl font-bold font-headline">Our Mission</h2>
             <p className="text-muted-foreground">
-              Finding a comfortable, safe, and affordable place to live is crucial for academic success. FUD Housing Connect was born out of the need to simplify the stressful process of searching for off-campus accommodation for students of Federal University Dutse (FUD).
+              Finding a comfortable, safe, and affordable place to live is crucial for academic success. Student Housing Connect was born out of the need to simplify the stressful process of searching for off-campus accommodation for students of Federal University Dutse (FUD).
             </p>
             <p className="text-muted-foreground">
               Our platform connects students directly with verified landlords and agents, providing a transparent and secure environment to find the perfect home away from home. We are committed to eliminating the hassles of house-hunting, so students can focus on what truly matters: their education.
@@ -101,7 +101,7 @@ export default function AboutPage() {
             <div className="flex justify-center items-center gap-8">
                 <div className="flex items-center gap-2">
                     <Mail className="h-5 w-5 text-primary" />
-                    <a href="mailto:support@fudhousing.com" className="hover:underline">support@fudhousing.com</a>
+                    <a href="mailto:support@studenthousingconnect.com" className="hover:underline">support@studenthousingconnect.com</a>
                 </div>
                 <div className="flex items-center gap-2">
                     <Phone className="h-5 w-5 text-primary" />

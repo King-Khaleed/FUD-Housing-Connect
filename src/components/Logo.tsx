@@ -8,7 +8,7 @@ export function Logo() {
         <Home className="h-6 w-6 text-primary-foreground" />
       </div>
       <span className="text-xl font-bold font-headline text-foreground hidden sm:inline-block whitespace-nowrap">
-        FUD Housing Connect
+        Student Housing Connect
       </span>
     </Link>
   );
